@@ -23,7 +23,7 @@ With dynamic pricing implemented on an unprecedented scale, the resale market tu
 2. **Data Cleaning and Structuring**
    Used Python (Pandas) to merge time-series data and handle missing values, tracking price changes and listing/removal timing for each ticket.
 
-3. **Interactive Visualization **
+3. **Interactive Visualization**
    Built a scrollytelling interface that links user scrolling to real-time "time travel" and stadium seat price fluctuations, going beyond static analysis.
 
 ## Growth & Skills Acquired
