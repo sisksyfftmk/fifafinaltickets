@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { base } from '$app/paths'; // 🌟 これを追加
+  import { base } from '$app/paths'; // 
   
   import OpeningClock from "$components/OpeningClock.svelte";
   import PriceChart from "$components/figure/PriceChart.svelte";
@@ -116,7 +116,7 @@
       class:visible={!!storySteps[activeStep]?.bgImage}>
     </div>
     
-    <div class="dashboard-elements" class:visible={activeStep >= 3 && currentStep.layout !== "fullscreen"}>    
+   <div class="dashboard-elements" class:visible={activeStep >= 3 && currentStep.layout !== "fullscreen"}>    
       {#if !currentStep.phantomMode && !isSideBySide && currentStep.layout !== "waterfall-image"}
         <div class="dashboard-header" 
              class:hide-header={!!currentStep.iframeUrl || currentStep.layout === "distribution-chart" || currentStep.layout === "stadium-map" || currentStep.layout === "sankey-chart"}>
@@ -139,29 +139,16 @@
       {/if}
       
       <div class="main-chart-wrapper" style="position: relative;" 
-           class:fade-out={currentStep.layout === "fullscreen-clock" || currentStep.layout === "distribution-chart" || currentStep.layout === "stadium-map" || currentStep.layout === "sankey-chart"}>
+           class:fade-out={currentStep.layout === "fullscreen-clock" || currentStep.layout === "distribution-chart" || currentStep.layout === "stadium-map" || currentStep.layout === "sankey-chart" || !!currentStep.iframeUrl}>
         
-        {#if currentStep.iframeUrl}
-          <div class="embedded-datawrapper fullscreen-iframe">
-            <iframe 
-              title="Datawrapper Chart" 
-              aria-label="Column Chart" 
-              src={currentStep.iframeUrl} 
-              scrolling="no" 
-              frameborder="0" 
-              style="width: 100%; height: 100%; border: none;">
-            </iframe>
-          </div>
-
-        {:else if currentStep.layout === "waterfall-image"}
+        {#if currentStep.layout === "waterfall-image"}
           <div class="waterfall-container">
             <div class="waterfall-image-wrapper">
-              <!-- 🌟 {base} を追加 -->
               <img src="{base}/images/matrix_waterfall.png" alt="Ticket Liquidity Waterfall" />
             </div>
           </div>
 
-        {:else if !currentStep.iframeUrl && !currentStep.phantomMode && !isSideBySide && currentStep.layout !== "waterfall-image"}
+        {:else if !currentStep.phantomMode && !isSideBySide && currentStep.layout !== "waterfall-image"}
           <PriceChart 
             data={ticketData} 
             highlightIds={currentStep.highlightIds || []} 
@@ -172,7 +159,6 @@
 
         {#if currentStep.graphImage}
           <div class="graph-image-overlay">
-            <!-- 🌟 {base} を追加 -->
             <img src="{base}/{currentStep.graphImage.replace(/^\//, '')}" alt="Reference visual" />
             <div class="photo-credit">Photo : Getty Images</div>
           </div>
@@ -238,7 +224,6 @@
       </div>
 
       <div class="sankey-overlay" class:visible={currentStep.layout === "sankey-chart"}>
-        <!-- 🌟 {base} を追加 -->
         <iframe 
           src="{base}/sankey.html" 
           title="Sankey Chart" 
@@ -248,7 +233,18 @@
         </iframe>
       </div>
 
-    </div>
+      <div class="datawrapper-overlay" class:visible={!!currentStep.iframeUrl}>
+        <iframe 
+          title="Datawrapper Chart" 
+          aria-label="Column Chart" 
+          src="https://datawrapper.dwcdn.net/NtA6l/1/?dark=true" 
+          scrolling="no" 
+          frameborder="0" 
+          style="width: 100%; height: 100%; border: none;">
+        </iframe>
+      </div>
+
+    </div> 
   </div>
 
   <div class="scrolling-text">
@@ -657,29 +653,6 @@
     pointer-events: none;
   }
 
-  .embedded-datawrapper {
-    width: 100%;
-    height: 100%;
-    max-height: 480px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-    background: rgba(18, 18, 18, 0.8);
-    border: 1px solid #334155;
-    border-radius: 12px;
-    backdrop-filter: blur(8px);
-    box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-    overflow: hidden;
-  }
-
-  .embedded-datawrapper iframe {
-    width: 100%;
-    height: 460px;
-    margin-bottom: -40px; 
-    border: none;
-  }
-
   .waterfall-container {
     width: 100%;
     height: 100%;
@@ -1031,10 +1004,8 @@
   .historical-chart-wrapper {
     width: 100%;
     margin-top: 2rem; 
-
   }
 
-  /* 🌟 最初のステップ（タイトル画面）専用の設定 */
   .step-container[data-index="0"] {
     margin-top: 0 !important;      /* 待機スクロールをなくし、最初から表示 */
     min-height: 100vh !important;  /* 画面の高さいっぱいに広げる */
@@ -1050,30 +1021,10 @@
     margin-top: 50px; /* 300pxなどから大幅に短くする（お好みで調整） */
   }
 
-  /* 🌟 THE DATASETのカードだけ幅を少し縮める */
   .step-container.is-fullscreen .step-card.dataset-card {
     max-width: 850px !important; /* 1300pxから850pxに縮小（お好みで調整してください） */
   }
-
-  /* 🌟 Datawrapperを右側全体（またはコンテナ全体）に美しく広げる設定 */
-  .embedded-datawrapper.fullscreen-iframe {
-    width: 90%; /* 右側の黒い空間にちょうど良く収まる幅 */
-    max-width: 1000px;
-    height: 75vh;
-    max-height: none; /* デフォルトの max-height: 480px を解除 */
-    margin: 0 auto;
-    border-radius: 12px;
-    background: transparent; /* Datawrapper自体の背景（ダークモード）を活かす */
-    border: none;
-    box-shadow: none;
-  }
-
-  .embedded-datawrapper.fullscreen-iframe iframe {
-    height: 100%;
-    margin-bottom: 0;
-  }
   
-  /* 🌟 結論セクション全体 */
   .conclusion-section {
     position: relative;
     padding: 120px 5% 80px 5%;
@@ -1083,7 +1034,6 @@
     overflow: hidden;
   }
 
-  /* 🌟 背景画像の設定 (HTML側に移動させたため、ここからは background-image を削除しました) */
   .conclusion-bg {
     position: absolute;
     top: 0;
@@ -1095,7 +1045,6 @@
     z-index: 0;
   }
 
-  /* 🌟 文字を読みやすくするための暗いフィルター（上下を黒くグラデーション） */
   .conclusion-bg::after {
     content: '';
     position: absolute;
@@ -1107,7 +1056,6 @@
     z-index: 1;
   }
 
-  /* 🌟 右下の写真クレジット */
   .photo-credit {
     position: absolute;
     bottom: 12px;
@@ -1119,7 +1067,6 @@
     pointer-events: none;
   }
 
-  /* 🌟 コンテンツ部分は背景の上に表示する */
   .conclusion-container {
     position: relative;
     max-width: 850px;
@@ -1194,7 +1141,32 @@
     margin: 0;
   }
 
-  /* 🌟 GitHubボタン */
+  .datawrapper-overlay {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-width: 1000px;
+    height: 75vh;
+    background: transparent;
+    z-index: 150;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s;
+  }
+  
+  .datawrapper-overlay.visible {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .datawrapper-overlay iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 12px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+  }
+
   .github-btn {
     display: inline-flex;
     align-items: center;
