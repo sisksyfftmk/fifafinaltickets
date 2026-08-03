@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import { base } from '$app/paths'; // 🌟 これを追加
   
   import OpeningClock from "$components/OpeningClock.svelte";
   import PriceChart from "$components/figure/PriceChart.svelte";
@@ -108,9 +109,10 @@
 
   <div class="sticky-visuals" class:transparent-bg={activeStep < 3}>
 
+    <!-- 🌟 {base} を使って背景画像のパスを修正 -->
     <div 
       class="fullscreen-step-bg"
-      style:background-image={storySteps[activeStep]?.bgImage ? `linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.95)), url('${storySteps[activeStep].bgImage}')` : null}
+      style:background-image={storySteps[activeStep]?.bgImage ? `linear-gradient(rgba(0, 0, 0, 0.50), rgba(0, 0, 0, 0.95)), url('${base}/${storySteps[activeStep].bgImage.replace(/^\//, '')}')` : null}
       class:visible={!!storySteps[activeStep]?.bgImage}>
     </div>
     
@@ -154,7 +156,8 @@
         {:else if currentStep.layout === "waterfall-image"}
           <div class="waterfall-container">
             <div class="waterfall-image-wrapper">
-              <img src="/images/matrix_waterfall.png" alt="Ticket Liquidity Waterfall" />
+              <!-- 🌟 {base} を追加 -->
+              <img src="{base}/images/matrix_waterfall.png" alt="Ticket Liquidity Waterfall" />
             </div>
           </div>
 
@@ -169,7 +172,8 @@
 
         {#if currentStep.graphImage}
           <div class="graph-image-overlay">
-            <img src={currentStep.graphImage} alt="Reference visual" />
+            <!-- 🌟 {base} を追加 -->
+            <img src="{base}/{currentStep.graphImage.replace(/^\//, '')}" alt="Reference visual" />
             <div class="photo-credit">Photo : Getty Images</div>
           </div>
         {/if}
@@ -202,9 +206,9 @@
         <div class="seat-view-content">
           {#if currentStep.layout !== "stadium-map"}
             <div class="view-photo">
-              {#if activeTicket && (activeTicket.vfsUrl || activeTicket.vfs_url)}
+              {#if activeTicket && activeTicket.section}
                 {#key activeTicket.id}
-                  <img src={activeTicket.vfsUrl || activeTicket.vfs_url} alt="View from Section {activeTicket.section}" />
+                  <img src="{base}/images/section{activeTicket.section}.jpg" alt="View from Section {activeTicket.section}" />
                   <div class="photo-label">VIEW FROM SEC {activeTicket.section}</div>
                 {/key}
               {:else}
@@ -234,8 +238,9 @@
       </div>
 
       <div class="sankey-overlay" class:visible={currentStep.layout === "sankey-chart"}>
+        <!-- 🌟 {base} を追加 -->
         <iframe 
-          src="/sankey.html" 
+          src="{base}/sankey.html" 
           title="Sankey Chart" 
           width="100%" 
           height="100%" 
@@ -295,7 +300,6 @@
       Let's take a closer look at the dramatic changes that occurred within just four hours. The observation of such unnatural movements on the day before the final shines a light on the opacity of the resale ticket market.
     </p>
   </div>
-  ...
 
   <div class="small-multiples-grid">
     {#each processedPhantomSteps as step}
@@ -325,7 +329,8 @@
 </section>
 
 <section class="conclusion-section">
-  <div class="conclusion-bg">
+  <!-- 🌟 {base} を追加し、CSSから直接style属性指定に変更 -->
+  <div class="conclusion-bg" style="background-image: url('{base}/images/trophy.png');">
     <div class="photo-credit">Photo: FIFA</div>
   </div>
 
@@ -521,7 +526,7 @@
     background: transparent; 
     padding: 0;             
     border: none;            
-    backdrop-filter: none;   
+    backdrop-filter: none;  
     text-shadow: 0 2px 10px rgba(0,0,0,0.9);
     color: #fff;
   }
@@ -1078,14 +1083,13 @@
     overflow: hidden;
   }
 
-  /* 🌟 背景画像の設定 */
+  /* 🌟 背景画像の設定 (HTML側に移動させたため、ここからは background-image を削除しました) */
   .conclusion-bg {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: url('/images/trophy.png');
     background-size: cover;
     background-position: center;
     z-index: 0;
