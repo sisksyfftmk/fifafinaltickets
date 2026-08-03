@@ -1,5 +1,4 @@
-<script>　
-  import { base } from '$app/paths';
+<script>
   import { onMount } from 'svelte';
   
   import OpeningClock from "$components/OpeningClock.svelte";
@@ -155,7 +154,7 @@
         {:else if currentStep.layout === "waterfall-image"}
           <div class="waterfall-container">
             <div class="waterfall-image-wrapper">
-              <img src="{base}/images/matrix_waterfall.png" alt="Ticket Liquidity Waterfall" />
+              <img src="/images/matrix_waterfall.png" alt="Ticket Liquidity Waterfall" />
             </div>
           </div>
 
@@ -170,7 +169,7 @@
 
         {#if currentStep.graphImage}
           <div class="graph-image-overlay">
-            <img src="{base}{currentStep.graphImage}" alt="Reference visual" />
+            <img src={currentStep.graphImage} alt="Reference visual" />
             <div class="photo-credit">Photo : Getty Images</div>
           </div>
         {/if}
@@ -205,7 +204,7 @@
             <div class="view-photo">
               {#if activeTicket && (activeTicket.vfsUrl || activeTicket.vfs_url)}
                 {#key activeTicket.id}
-                  <img src="{base}{activeTicket.vfsUrl || activeTicket.vfs_url}" alt="View from Section {activeTicket.section}" />
+                  <img src={activeTicket.vfsUrl || activeTicket.vfs_url} alt="View from Section {activeTicket.section}" />
                   <div class="photo-label">VIEW FROM SEC {activeTicket.section}</div>
                 {/key}
               {:else}
@@ -236,7 +235,7 @@
 
       <div class="sankey-overlay" class:visible={currentStep.layout === "sankey-chart"}>
         <iframe 
-          src="{base}/sankey.html" 
+          src="/sankey.html" 
           title="Sankey Chart" 
           width="100%" 
           height="100%" 
@@ -326,7 +325,7 @@
 </section>
 
 <section class="conclusion-section">
-  <div class="conclusion-bg" style="background-image: url('{base}/images/trophy.png');">
+  <div class="conclusion-bg">
     <div class="photo-credit">Photo: FIFA</div>
   </div>
 
@@ -1086,6 +1085,7 @@
     left: 0;
     width: 100%;
     height: 100%;
+    background-image: url('/images/trophy.png');
     background-size: cover;
     background-position: center;
     z-index: 0;

@@ -77,7 +77,7 @@ export const storySteps = [
     time: null,
     ticketCount: 0,
     layout: "fullscreen",
-    bgImage: "images/stubhub.jpg"
+    bgImage: "/images/stubhub.jpg"
   },
 
   {
@@ -111,7 +111,7 @@ export const storySteps = [
     highlightIds: [13382694909], 
     time: "2026-07-18T05:07:00",
     ticketCount: 448,
-    graphImage: "images/spain.jpg"
+    graphImage: "/images/spain.jpg"
   },
 
   {
@@ -209,9 +209,7 @@ You will likely notice that the "Lower" sections, closest to the field, appear r
     layout: "waterfall-image" 
   },
   
-  // story_steps.js 内
   {
-    title: "THE ANOMALY",
     text: "When looking at the number of tickets by time period, they generally fluctuated between 400 and 500 tickets. However, when focusing on the morning before the match, unnatural movements become apparent. Dramatic increases and decreases of as many as 200 tickets per hour were repeated.",
     iframeUrl: "https://datawrapper.dwcdn.net/NtA6l/1/?dark=true", 
     highlightIds: [], 
